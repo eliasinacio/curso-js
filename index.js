@@ -14,7 +14,7 @@ const field = {
 }
 
 const line = {
-    width: 15,
+    width: 12,
     height: field.height,
     draw: function () {
         const x = (field.width / 2) - this.width / 2
@@ -48,10 +48,20 @@ const ball = {
     x: 200,
     y: 300,
     radius: 15,
+    speed: 5,
+
+    _move: function () {
+        this.y += 1 * this.speed
+        this.x += 1 * this.speed
+    },
+    
     draw: function () {
         context.beginPath()
+        context.fillStyle = '#fff'
         context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
         context.fill()
+
+        this._move()
     }
 }
 
@@ -82,10 +92,28 @@ function draw() {
     line.draw()
     leftPaddle.draw()
     rightPaddle.draw()
-
+    
     ball.draw()
     score.draw('3', '3')
 }
 
+window.animateFrame = (function () {
+    return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame || 
+        function (callback) {
+            return window.setTimeout(callback, 1000 / 60)
+        }
+    )
+})()
+
+function main () {
+    animateFrame(main)
+    draw()
+}
+
 setup()
-draw()
+main()
