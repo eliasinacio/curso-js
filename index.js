@@ -2,71 +2,79 @@ const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 const canvasContainer = document.querySelector('#ping-pong')
 
-// const canvasPosX = canvasContainer.offsetTop
-// const canvasPosY = canvasContainer.offsetLeft
-const canvasWidth = canvasContainer.offsetWidth
-const canvasHeight = canvasContainer.offsetHeight / 2
-
-const lineWidth = 15
-const racketWidth = 10
-
 const field = {
+    width: canvasContainer.offsetWidth,
+    height: canvasContainer.offsetHeight * 2/3,
+    draw: function () {
+        context.fillStyle = '#286047'
+        context.fillRect(0, 0, this.width, this.height)
+    }
+}
 
+const line = {
+    width: 15,
+    height: field.height,
+    draw: function () {
+        const x = (field.width / 2) - this.width / 2
+
+        context.fillStyle = '#ccc'
+        context.fillRect(x, 0, this.width, this.height)
+    }
+}
+
+const leftRacket = {
+    width: 12,
+    height: 140,
+    draw: function () {
+        context.fillRect(10, 50, this.width, this.height)
+    }
+}
+
+const rightRacket = {
+    width: 12,
+    height: 140,
+    draw: function () {
+        const x = field.width - 10 - this.width
+        context.fillRect(x, 50, this.width, this.height)
+    }
+}
+
+const ball = {
+    draw: function () {
+        context.beginPath()
+        context.arc(200, 300, 15, 0, 2 * Math.PI)
+        context.fill()
+    }
+}
+
+const score = {
+    draw: function (player1, player2) {
+        context.font = 'bold 72px Arial'
+        context.textAlign = 'center'
+        context.textBaseline = 'top'
+        context.fillStyle = '#01341D'
+    
+        context.fillText(player1, field.width / 4, 50)
+        context.fillText(player2, 3 / 4 * field.width, 50)
+    }
 }
 
 function setup () {
-    canvas.width = context.width = canvasWidth
-    canvas.height = context.height = canvasHeight
+    canvas.width = context.width = field.width
+    canvas.height = context.height = field.height
 }
 
 function draw () {
-    drawCanvas()
-    
+    field.draw()
+
     context.fillStyle = '#ccc'
 
-    drawMidLine(lineWidth)
-    leftRacket(racketWidth)
-    rightRacket(racketWidth)
-    ball()
+    line.draw()
+    leftRacket.draw()
+    rightRacket.draw()
 
-    score()
-}
-
-function drawCanvas () {
-    context.fillStyle = '#286047'
-    context.fillRect(0, 0, canvasWidth, canvasHeight)
-}
-
-function drawMidLine (lineWidth) {
-    const x = (canvasWidth / 2) - lineWidth / 2
-    context.fillRect(x, 0, lineWidth, canvasHeight)
-}
-
-function leftRacket (racketWidth) {
-    context.fillRect(10, 50, racketWidth, 120)
-}
-
-function rightRacket (racketWidth) {
-    const x = canvasWidth - 10 - racketWidth
-    context.fillRect(x, 50, racketWidth, 120)
-}
-
-function ball () {
-    context.beginPath()
-
-    context.arc(200, 300, 15, 0, 2 * Math.PI)
-    
-    context.fill()
-}
-
-function score () {
-    context.font = 'bold 72px Arial'
-    context.textAlign = 'center'
-    context.textBaseline = 'top'
-    context.fillStyle = '#01341D'
-
-    context.fillText('3', canvasWidth / 4, 50)
-    context.fillText('3', 3 / 4 * canvasWidth, 50)
+    ball.draw()
+    score.draw('3', '3')
 }
 
 setup()
