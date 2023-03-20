@@ -59,29 +59,40 @@ const rightPaddle = {
 }
 
 const ball = {
-    x: 200,
-    y: 300,
+    x: 400,
+    y: 400,
     radius: 15,
     speed: 5,
     dirX: 1,
     dirY: 1,
 
     _positions: function () {
-        if (this.y > field.height) {
+        if (this.y > field.height - this.radius) {
             this._reverseY()
         }
 
-        if (this.y == 0) {
+        if (this.y == this.radius) {
             this._reverseY()
         }
 
-        if (this.x === rightPaddle.x) {
+        if (this.x + this.radius === rightPaddle.x && this.y >= rightPaddle.y && this.y <= rightPaddle.y + 140) {
             this._reverseX()
         }
-        
-        // if (this.y > field.height) {
-        //     this._reverseY
-        // }
+
+        if (this.x <= line.width + this.radius && this.y >= leftPaddle.y && this.y <= leftPaddle.y + 140) {
+            this._reverseX()
+        }
+
+        // pontuação
+        if (this.x > field.width) {
+            score.increasePlayer1()
+            this._startPoint()
+        }
+
+        if (this.x < 0) {
+            score.increasePlayer2()
+            this._startPoint()
+        }
     },
 
     _reverseX: function () {
@@ -90,6 +101,11 @@ const ball = {
 
     _reverseY: function () {
         this.dirY *= -1
+    },
+
+    _startPoint: function () {
+        x = 400
+        y = 400
     },
 
     _move: function () {
@@ -109,8 +125,17 @@ const ball = {
 }
 
 const score = {
-    player1: 1,
-    player2: 2,
+    player1: 0,
+    player2: 0,
+
+    increasePlayer1: function () {
+        this.player1 += 1
+    },
+
+    increasePlayer2: function () {
+        this.player2 += 1
+    },
+
     draw: function () {
         context.font = 'bold 72px Arial'
         context.textAlign = 'center'
