@@ -59,8 +59,8 @@ const rightPaddle = {
 }
 
 const ball = {
-    x: 400,
-    y: 400,
+    x: field.width/2,
+    y: field.height/2,
     radius: 15,
     speed: 5,
     dirX: 1,
@@ -71,15 +71,15 @@ const ball = {
             this._reverseY()
         }
 
-        if (this.y == this.radius) {
+        if (this.y <= this.radius) {
             this._reverseY()
         }
 
-        if (this.x + this.radius === rightPaddle.x && this.y >= rightPaddle.y && this.y <= rightPaddle.y + 140) {
+        if (this.x + this.radius >= rightPaddle.x && this.y >= rightPaddle.y && this.y <= rightPaddle.y + rightPaddle.height) {
             this._reverseX()
         }
 
-        if (this.x <= line.width + this.radius && this.y >= leftPaddle.y && this.y <= leftPaddle.y + 140) {
+        if (this.x <= leftPaddle.x + line.width + this.radius && this.y >= leftPaddle.y && this.y <= leftPaddle.y + leftPaddle.height) {
             this._reverseX()
         }
 
@@ -104,8 +104,8 @@ const ball = {
     },
 
     _startPoint: function () {
-        x = 400
-        y = 400
+        this.x = screen.width/2
+        this.y = screen.height/2
     },
 
     _move: function () {
@@ -161,8 +161,8 @@ function draw() {
     leftPaddle.draw()
     rightPaddle.draw()
 
-    ball.draw()
     score.draw('3', '3')
+    ball.draw()
 }
 
 window.animateFrame = (function () {
