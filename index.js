@@ -47,9 +47,18 @@ const rightPaddle = {
     y: 0,
     width: line.width,
     height: 140,
+    speed: 5,
 
     _move: function () {
-        this.y = ball.y - this.height / 2
+        if (this.y + this.height / 2 < ball.y + ball.radius) {
+            this.y += this.speed
+        } else {
+            this.y -= this.speed
+        }
+    },
+
+    speedUp: function () {
+        this.speed += 2
     },
 
     draw: function () {
@@ -59,8 +68,8 @@ const rightPaddle = {
 }
 
 const ball = {
-    x: field.width/2,
-    y: field.height/2,
+    x: field.width/4,
+    y: field.height/4,
     radius: 15,
     speed: 5,
     dirX: 1,
@@ -86,12 +95,12 @@ const ball = {
         // pontuação
         if (this.x > field.width) {
             score.increasePlayer1()
-            this._startPoint()
+            this._pointUp()
         }
 
         if (this.x < 0) {
             score.increasePlayer2()
-            this._startPoint()
+            this._pointUp()
         }
     },
 
@@ -103,7 +112,10 @@ const ball = {
         this.dirY *= -1
     },
 
-    _startPoint: function () {
+    _pointUp: function () {
+        this._speedUp()
+        rightPaddle.speedUp()
+
         this.x = screen.width/2
         this.y = screen.height/2
     },
@@ -111,6 +123,10 @@ const ball = {
     _move: function () {
         this.x += this.speed * this.dirX
         this.y += this.speed * this.dirY
+    },
+
+    _speedUp: function () {
+        this.speed += 2.5
     },
 
     draw: function () {
@@ -161,7 +177,7 @@ function draw() {
     leftPaddle.draw()
     rightPaddle.draw()
 
-    score.draw('3', '3')
+    score.draw('0', '0')
     ball.draw()
 }
 
